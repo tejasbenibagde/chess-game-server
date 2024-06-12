@@ -10,7 +10,7 @@ const app = express();
 const server = http.createServer(app);
 
 const allowedOrigins = [
-  "https://chess-paasta.netlify.app",
+  "https://king-gambit.netlify.app",
   "http://localhost:5173",
 ];
 
