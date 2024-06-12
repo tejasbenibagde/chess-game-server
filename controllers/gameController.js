@@ -6,7 +6,7 @@ const {
 } = require("../utils/roomManager");
 
 function handleConnection(socket, io) {
-  console.log("A user connected", socket.id);
+  // console.log("A user connected", socket.id);
 
   addWaitingUser(socket);
 
@@ -23,10 +23,10 @@ function handleConnection(socket, io) {
 }
 
 function handleMove(socket, move, io) {
-  console.log("Move received:", move);
+  // console.log("Move received:", move);
 
   const roomName = findRoomBySocketId(socket.id);
-  console.log("Room name:", roomName);
+  // console.log("Room name:", roomName);
 
   if (roomName) {
     socket.to(roomName).emit("move", move);

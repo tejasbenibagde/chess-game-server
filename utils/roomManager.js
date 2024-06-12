@@ -26,7 +26,7 @@ function assignRoom(io) {
       room: roomName,
     });
 
-    console.log(`Game started in ${roomName}`);
+    // console.log(`Game started in ${roomName}`);
     return true;
   }
   return false;
@@ -42,7 +42,7 @@ function findRoomBySocketId(socketId) {
 }
 
 function handleDisconnection(socket, io) {
-  console.log("User disconnected", socket.id);
+  // console.log("User disconnected", socket.id);
 
   waitingUsers = waitingUsers.filter((user) => user.id !== socket.id);
 
