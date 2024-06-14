@@ -1,3 +1,5 @@
+//  utils/roomManager.js
+
 let waitingUsers = [];
 let roomCounter = 1;
 const rooms = {};
@@ -25,8 +27,8 @@ function assignRoom(io) {
       message: "Game started",
       room: roomName,
     });
+    // console.log("Game started", roomName);
 
-    // console.log(`Game started in ${roomName}`);
     return true;
   }
   return false;
@@ -42,8 +44,6 @@ function findRoomBySocketId(socketId) {
 }
 
 function handleDisconnection(socket, io) {
-  // console.log("User disconnected", socket.id);
-
   waitingUsers = waitingUsers.filter((user) => user.id !== socket.id);
 
   for (const room in rooms) {
