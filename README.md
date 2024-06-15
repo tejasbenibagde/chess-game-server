@@ -1,6 +1,5 @@
 ### Backend README.md
 
-````markdown
 # Chess Game Backend
 
 This project is the backend server for a Chess Game application built using Node.js and Socket.io for real-time communication.
@@ -33,4 +32,3 @@ To get a local copy up and running follow these simple steps.
    ```sh
    git clone https://github.com/tejasbenibagde/chess-game-server.git
    ```
-````
