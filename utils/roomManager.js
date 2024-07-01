@@ -1,7 +1,17 @@
+// roomManager.js
 
 let waitingUsers = [];
 let roomCounter = 1;
 const rooms = {};
+const userSocketMap = {};
+
+function storeUserId(socketId, userId) {
+  userSocketMap[socketId] = userId;
+}
+
+function getUserIdBySocketId(socketId) {
+  return userSocketMap[socketId];
+}
 
 function addWaitingUser(socket) {
   waitingUsers.push(socket);
@@ -27,8 +37,6 @@ function assignRoom(io) {
       room: roomName,
     });
 
-    // console.log("Game started in room:", roomName);
-
     return true;
   }
   return false;
@@ -46,17 +54,33 @@ function findRoomBySocketId(socketId) {
 function handleDisconnection(socket, io) {
   waitingUsers = waitingUsers.filter((user) => user.id !== socket.id);
 
-  // console.log("user disconnected", socket.id)
   for (const room in rooms) {
     if (rooms[room].includes(socket.id)) {
       rooms[room] = rooms[room].filter((id) => id !== socket.id);
 
       if (rooms[room].length === 0) {
         delete rooms[room];
-        // console.log("Room destroyed:", room);
+      } else {
+        const remainingPlayerId = rooms[room][0];
+        const winnerRole = remainingPlayerId === rooms[room][0] ? "w" : "b";
+        const userId = getUserIdBySocketId(remainingPlayerId);
+        io.to(remainingPlayerId).emit("gameOver", {
+          winner: winnerRole,
+          userId,
+        });
       }
     }
   }
+}
+
+function getOpponentUserIdBySocketId(socketId) {
+  const roomName = findRoomBySocketId(socketId);
+  if (roomName) {
+    const players = rooms[roomName];
+    const opponentSocketId = players.find((id) => id !== socketId);
+    return getUserIdBySocketId(opponentSocketId);
+  }
+  return null;
 }
 
 module.exports = {
@@ -64,4 +88,7 @@ module.exports = {
   assignRoom,
   findRoomBySocketId,
   handleDisconnection,
+  storeUserId,
+  getUserIdBySocketId,
+  getOpponentUserIdBySocketId,
 };
